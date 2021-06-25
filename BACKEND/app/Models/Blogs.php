@@ -21,4 +21,8 @@ class Blogs extends Model
     {
         return $this->hasMany(Events::class);
     }
+    function addBlog($data)
+    {
+        DB::table('blogs')->insert($data);
+    }
 }

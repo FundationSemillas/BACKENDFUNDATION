@@ -40,7 +40,32 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->json()->all();
+        if ($request->hasFile('image'))
+            {  
+                  $file      = $request->file('image');
+                  $filename  = $file->getClientOriginalName();
+                  $extension = $file->getClientOriginalExtension();
+                  $picture   = date('His').'-'.$filename;
+                  $path = $file->storeAs('public/posts', $picture);
+    
+            $employeeData = json_decode($request->data,true);
+            $employeeData["image"] =  $picture;
+        
+            $blogs = new Blogs();
+            $data=$blogs->addBlogs($employeeData);   
+            var_dump($data);   
+    
+            return response()->json([
+                    'data' => [
+                        'Guardado'=>'Exitoso'
+                    ]
+                ], 201);        
+    
+            } 
+            else
+            {
+            }
+        /*$data = $request->json()->all();
         $dataBlog = $data['blogs'];
         $blogs = new Blogs();
         $blogs->title =  $dataBlog['title'];
@@ -52,7 +77,7 @@ class BlogController extends Controller
             'data' => [
                 'Guardado' => 'Exitoso'
             ]
-        ], 201);
+        ], 201);*/
     }
 
     /**

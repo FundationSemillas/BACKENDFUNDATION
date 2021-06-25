@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Children extends Model
 {
@@ -41,5 +42,9 @@ class Children extends Model
     public function setFathersName($value)
     {
         $this->attributes['fathersName'] = strtoupper($value);
+    }
+    function addChild($data)
+    {
+        DB::table('children')->insert($data);
     }
 }

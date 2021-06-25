@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Events;
 use App\Models\Albums;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -103,15 +102,15 @@ class AlbumController extends Controller
         $data = $request->json()->all();
         
         $albums = albums::findOrFail($id);
-        $dataAlbums = $data['albums'];
-        $dataEvents = $data['events'];
-        $events = Events::findOrFail($dataEvents['id']);
+        // $dataAlbums = $data['albums'];
+        // $dataEvents = $data['events'];
+        // $events = Events::findOrFail($dataEvents['id']);
 
        
-        $albums->title =  $dataAlbums['title'];
-        $albums->description =  $dataAlbums['description'];
-        $albums->date =  $dataAlbums['date'];
-        $albums->events()->associate($events);
+        $albums->title =  $data['title'];
+        $albums->description =  $data['description'];
+        $albums->date =  $data['date'];
+        // $albums->events()->associate($events);
         $albums->save();
 
         return response()->json([

@@ -43,7 +43,7 @@ class AlbumController extends Controller
                   $filename  = $file->getClientOriginalName();
                   $extension = $file->getClientOriginalExtension();
                   $picture   = date('His').'-'.$filename;
-                  $path = $file->storeAs('public/posts', $picture);
+                  $path = $file->storeAs('public/', $picture);
     
             $employeeData = json_decode($request->data,true);
             $employeeData["image"] =  $picture;

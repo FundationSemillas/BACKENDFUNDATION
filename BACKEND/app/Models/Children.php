@@ -23,7 +23,7 @@ class Children extends Model
         'study',
         'houseAddress',
         'schoolName',
-        'image',
+        'Image',
         'state',
     ];
 

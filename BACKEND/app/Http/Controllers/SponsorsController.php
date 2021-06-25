@@ -44,7 +44,7 @@ class SponsorsController extends Controller
             $filename  = $file->getClientOriginalName();
             $extension = $file->getClientOriginalExtension();
             $picture   = date('His').'-'.$filename;
-            $path = $file->storeAs('public/posts', $picture);
+            $path = $file->storeAs('public/', $picture);
 
             $sponsorData = json_decode($request->data,true);
             $sponsorData["image"] =  $picture;

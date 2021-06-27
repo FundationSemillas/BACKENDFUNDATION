@@ -36,16 +36,16 @@ class ChildrenController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->hasFile('image'))
+        if ($request->hasFile('Image'))
         {  
-              $file      = $request->file('image');
+              $file      = $request->file('Image');
               $filename  = $file->getClientOriginalName();
               $extension = $file->getClientOriginalExtension();
               $picture   = date('His').'-'.$filename;
               $path = $file->storeAs('public/posts', $picture);
 
         $employeeData = json_decode($request->data,true);
-        $employeeData["image"] =  $picture;
+        $employeeData["Image"] =  $picture;
     
         $children = new Children();
         $data=$children->addChild($employeeData);   

@@ -135,7 +135,7 @@ class ChildrenController extends Controller
         $children->study = $request->input('study');
         $children->houseAddress = $request->input('houseAddress');
         $children->schoolName = $request->input('schoolName');
-        $children->image = $request->input('image');
+        $children->Image = $request->input('Image');
 
         $children->save();
         return response()->json(

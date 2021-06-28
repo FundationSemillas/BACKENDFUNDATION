@@ -65,7 +65,7 @@ class BlogController extends Controller
             else
             {
             }
-           }
+           
         /*$data = $request->json()->all();
         $dataBlog = $data['blogs'];
         $blogs = new Blogs();

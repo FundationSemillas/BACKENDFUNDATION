@@ -78,7 +78,7 @@ class ChildrenController extends Controller
         $children->study =  $dataPerson['study'];
         $children->houseAddress =  $dataPerson['houseAddress'];
         $children->schoolName = $dataPerson['schoolName'];
-        $children->image =  $dataPerson['image'];
+        $children->Image =  $dataPerson['image'];
         $children->save();
 
         return response()->json([

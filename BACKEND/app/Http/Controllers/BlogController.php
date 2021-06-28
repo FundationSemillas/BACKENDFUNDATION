@@ -65,6 +65,7 @@ class BlogController extends Controller
             else
             {
             }
+           }
         /*$data = $request->json()->all();
         $dataBlog = $data['blogs'];
         $blogs = new Blogs();
@@ -116,11 +117,11 @@ class BlogController extends Controller
     {
         $data = $request->json()->all();
         $blogs = Blogs::findOrFail($id);
-        $dataBlog = $data['blogs'];
-        $blogs->title =  $dataBlog['title'];
-        $blogs->description =  $dataBlog['description'];
-        $blogs->image =  $dataBlog['image'];
-        $blogs->link =  $dataBlog['link'];
+         //$dataBlog = $data['blogs'];
+        $blogs->title =  $data['title'];
+        $blogs->description =  $data['description'];
+        //$blogs->image =  $dataBlog['image'];
+        //$blogs->link =  $data['link'];
         $blogs->save();
         return response()->json([
             'data' => [

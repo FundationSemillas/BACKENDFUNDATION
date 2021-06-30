@@ -13,7 +13,7 @@ class Images extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'name',
+        'image',
         'type',
         'description',
     ];

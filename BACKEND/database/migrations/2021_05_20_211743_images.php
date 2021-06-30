@@ -15,7 +15,7 @@ class Images extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->notNullable();
+            $table->string('image')->notNullable();
             $table->string('type')->nullable();
             $table->string('description')->nullable();
             $table->foreignId('albums_id')->constrained('albums');

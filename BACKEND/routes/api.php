@@ -11,6 +11,9 @@ use App\Http\Controllers\SponsorsController;
 use App\Http\Controllers\SponsorsEventsController;
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\VolunteersController;
+use App\Models\Images;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +66,11 @@ Route::get('/artisan/storage', function() {
     $command = 'storage:link';
     $result = Artisan::call($command);
     return Artisan::output();
+});
+
+Route::delete('/image/id/{id}', function($id) {
+    DB::table('images')->where('id', $id)->delete();
+    return response()->json(['message'=>'imagen quitada'],200);
 });
 
 

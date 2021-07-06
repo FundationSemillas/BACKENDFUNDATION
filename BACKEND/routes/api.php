@@ -73,5 +73,9 @@ Route::delete('/image/id/{id}', function($id) {
     return response()->json(['message'=>'imagen quitada'],200);
 });
 
-
+Route::get('/filterYear/{year}', function($year){
+    $data = DB::table('albums')->whereYear('date', '=', $year)->get(); 
+   return response()->json(
+    $data);
+});
 

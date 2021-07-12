@@ -11,6 +11,7 @@ use App\Http\Controllers\SponsorsController;
 use App\Http\Controllers\SponsorsEventsController;
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\VolunteersController;
+use App\Http\Controllers\UserController;
 use App\Models\Images;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -45,6 +46,8 @@ Route::post('/reset', '\App\Http\Controllers\ForgotController@reset');
 
 //Rutas en general del servidor get-post-put-delete
 Route::apiResource('child',ChildrenController::class);
+
+Route::apiResource('user',UserController::class);
 
 Route::apiResource('blog',BlogController::class);
 

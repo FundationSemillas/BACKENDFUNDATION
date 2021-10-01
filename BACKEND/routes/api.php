@@ -13,6 +13,7 @@ use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\VolunteersController;
 use App\Http\Controllers\UserController;
 use App\Models\Images;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 

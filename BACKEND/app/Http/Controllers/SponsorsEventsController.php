@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 use App\Models\Events;
 use App\Models\Sponsors;
+use App\Models\SponsorsEvents;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SponsorsEventsController extends Controller
 {
@@ -14,10 +16,25 @@ class SponsorsEventsController extends Controller
      */
     public function index()
     {
-        return response()->json( sponsorEvents::all()
+        return response()->json( SponsorsEvents::all()
        );
     }
 
+    public function bySponsor($id){
+        $events = DB::table('events')
+            ->join('sponsorsEvents', 'events.id', '=', 'sponsorsEvents.events_id')
+            ->where('sponsorsEvents.sponsors_id', '=', $id)
+            ->get();
+        return $events;
+    }
+
+    public function byEvent($id){
+        $sponsors = DB::table('sponsors')
+        ->join('sponsorsEvents', 'sponsors.id', '=', 'sponsorsEvents.sponsors_id')
+        ->where('sponsorsEvents.events_id', '=', $id)
+        ->get();
+        return $sponsors;
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -65,9 +82,10 @@ class SponsorsEventsController extends Controller
      * @param  \App\Models\sponsorEvents  $sponsorEvents
      * @return \Illuminate\Http\Response
      */
-    public function show(sponsorEvents $sponsorEvents)
+    public function show(SponsorsEvents $sponsorEvents)
     {
-        $sponsorEvents = sponsorEvents::findOrFail($id);
+        $id = $sponsorEvents->id;
+        $sponsorEvents = SponsorsEvents::findOrFail($id);
         return response()->json(
               $sponsorEvents
        );
@@ -79,7 +97,7 @@ class SponsorsEventsController extends Controller
      * @param  \App\Models\sponsorEvents  $sponsorEvents
      * @return \Illuminate\Http\Response
      */
-    public function edit(sponsorEvents $sponsorEvents)
+    public function edit(SponsorsEvents $sponsorEvents)
     {
       //
     }
@@ -95,7 +113,7 @@ class SponsorsEventsController extends Controller
     {
         $data = $request->json()->all();
         
-        $sponsorEvents = sponsorEvents::findOrFail($id);
+        $sponsorEvents = SponsorsEvents::findOrFail($id);
         $dataSponsorEvents = $data['sponsorsEvents'];
         $dataSponsors = $data['sponsors'];
         $dataEvents = $data['events'];
@@ -120,9 +138,9 @@ class SponsorsEventsController extends Controller
      * @param  \App\Models\sponsorEvents  $sponsorEvents
      * @return \Illuminate\Http\Response
      */
-    public function destroy(sponsorEvents $sponsorEvents,$id)
+    public function destroy(SponsorsEvents $sponsorEvents,$id)
     {
-        $sponsorEvents = sponsorEvents::findOrFail($id);
+        $sponsorEvents = SponsorsEvents::findOrFail($id);
         $sponsorEvents->delete();
         return response()->json(['message'=>'sponsorEvents quitado', 'sponsorEvents'=>$sponsorEvents],200);
     }

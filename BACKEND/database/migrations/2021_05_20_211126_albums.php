@@ -19,7 +19,7 @@ class Albums extends Migration
             $table->string('image');
             $table->string('description',300)->nullable();
             $table->timestamp('date')->nullable();
-            //$table->foreignId('events_id')->constrained('events');
+            $table->foreignId('events_id')->constrained('events');
             $table->timestamps();
         });
     }

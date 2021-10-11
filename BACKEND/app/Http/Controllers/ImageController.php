@@ -50,11 +50,13 @@ class ImageController extends Controller
                 $filename  = $file->getClientOriginalName();
                 $extension = $file->getClientOriginalExtension();
                 $picture   = date('His').'-'.$filename;
-                $path = $file->storeAs('public/', $picture);
+               
+                $path = $file->move('public/', $picture);
                 $description = "imagen insertada";
 
                 // $id= 21;
                 $images = new Images();
+                    print_r($picture);
                     $images->image =  $picture;
                     $images->type =  $extension;
                     $images->description =  $description;

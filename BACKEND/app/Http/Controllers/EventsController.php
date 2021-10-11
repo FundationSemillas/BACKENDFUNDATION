@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Events;
 use App\Models\Blogs;
+use Faker\Core\Number;
 use Illuminate\Http\Request;
 
 
@@ -43,9 +44,9 @@ class EventsController extends Controller
         ], 201);  
     }
 
-    public function update(Resquest $request, $id){
+    public function update(Request $request, $id){
         $data = $request->json()->all();
-        $events = blog::findOrFail($id);
+        $events = Blogs::findOrFail($id);
         $dataEvents = $data['events'];
        
         $events->name =  $dataEvents['name'];
@@ -64,7 +65,7 @@ class EventsController extends Controller
         ], 201);  
     }
 
-    public function destroy(){
+    public function destroy($id){
         $events = Events::findOrFail($id);
         $events->delete();
         return response()->json(['Eliminado'=>'Exitoso'],201);

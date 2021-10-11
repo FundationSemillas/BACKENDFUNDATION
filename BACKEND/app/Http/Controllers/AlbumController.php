@@ -43,15 +43,16 @@ class AlbumController extends Controller
                   $filename  = $file->getClientOriginalName();
                   $extension = $file->getClientOriginalExtension();
                   $picture   = date('His').'-'.$filename;
-                  $path = $file->storeAs('public/', $picture);
-    
+                  
+                  $path = $file->move('public/', $picture);
+            
             $employeeData = json_decode($request->data,true);
             $employeeData["image"] =  $picture;
         
             $albums = new Albums();
             $data=$albums->addAlbum($employeeData);   
             var_dump($data);   
-    
+            
             return response()->json([
                     'data' => [
                         'Guardado'=>'Exitoso'

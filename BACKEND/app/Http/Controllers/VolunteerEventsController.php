@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Events;
+use App\Models\Sponsors;
+use App\Models\Volunteers;
+use App\Models\VolunteersEvents;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VolunteerEventsController extends Controller
 {
@@ -13,10 +18,25 @@ class VolunteerEventsController extends Controller
      */
     public function index()
     {
-        return response()->json( volunteersEvents::all()
+        return response()->json( VolunteersEvents::all()
        );
     }
 
+    public function byVolunteer($id){
+        $events = DB::table('events')
+            ->join('volunteersEvents', 'events.id', '=', 'volunteersEvents.events_id')
+            ->where('volunteersEvents.volunteers_id', '=', $id)
+            ->get();
+        return $events;
+    }
+
+    public function byEvent($id){
+        $volunteers = DB::table('volunteers')
+            ->join('volunteersEvents', 'volunteers.id', '=', 'volunteersEvents.volunteers_id')
+            ->where('volunteersEvents.events_id', '=', $id)
+            ->get();
+        return $volunteers;
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -66,6 +86,7 @@ class VolunteerEventsController extends Controller
      */
     public function show(volunteersEvents $volunteersEvents)
     {
+        $id = $volunteersEvents->id;
         $volunteersEvents = volunteersEvents::findOrFail($id);
         return response()->json(
               $volunteersEvents
@@ -98,7 +119,7 @@ class VolunteerEventsController extends Controller
         $dataVolunteersEvents = $data['sponsorsEvents'];
         $dataSponsors = $data['sponsors'];
         $dataEvents = $data['events'];
-        $sponsors = Sponsors::findOrFail($dataEvents['id']);
+        $sponsors = Sponsors::findOrFail($dataSponsors['id']);
         $events = Events::findOrFail($dataEvents['id']);
         
 
@@ -109,7 +130,7 @@ class VolunteerEventsController extends Controller
 
         return response()->json(
                $volunteersEvents
-        );
+        ); 
         
     }
 

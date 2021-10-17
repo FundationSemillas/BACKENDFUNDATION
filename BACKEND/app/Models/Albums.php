@@ -17,17 +17,16 @@ class Albums extends Model
         'description',
         'date',
         'image'
-       
     ];
-
+ 
     public function images()
     {
         return $this->hasMany(Images::class);
     }
-    /*public function events()
+    public function event()
     {
         return $this->belongsTo(Events::class);
-    }*/
+    }
 
     function addAlbum($data)
     {

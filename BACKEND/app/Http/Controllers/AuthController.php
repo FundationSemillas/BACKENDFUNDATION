@@ -48,7 +48,7 @@ class AuthController extends Controller
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
         $user->permission = $request->input('permission');
-        $user->rol_id = $request->input('rolId');
+        $user->rol_id = $request->input('rol_id');
         $user->save();
         return response()->json(['Usuario creado exitosamente'], 201);
     }

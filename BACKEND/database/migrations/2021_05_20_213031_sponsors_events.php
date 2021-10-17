@@ -13,10 +13,10 @@ class SponsorsEvents extends Migration
      */
     public function up()
     {
-        Schema::create('sponsorsEvents', function (Blueprint $table) {
+        Schema::create('sponsors_events', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('events_id')->constrained('events');
-            $table->foreignId('sponsors_id')->constrained('sponsors');
+            $table->foreignId('event_id')->constrained('events')->nullOnDelete();
+            $table->foreignId('sponsor_id')->constrained('sponsors')->nullOnDelete();
             $table->string('description')->nullable();
             $table->timestamps();
         });

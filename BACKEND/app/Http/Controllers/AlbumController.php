@@ -1,140 +1,91 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Albums;
+use App\Models\Events;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class AlbumController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        return response()->json( albums::all()
-       );
+        return response()->json(
+            albums::all()
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-            if ($request->hasFile('image'))
-            {  
-                  $file      = $request->file('image');
-                  $filename  = $file->getClientOriginalName();
-                  $extension = $file->getClientOriginalExtension();
-                  $picture   = date('His').'-'.$filename;
-                  
-                  $path = $file->move('public/', $picture);
-            
-            $employeeData = json_decode($request->data,true);
-            $employeeData["image"] =  $picture;
-        
-            $albums = new Albums();
-            $data=$albums->addAlbum($employeeData);   
-            var_dump($data);   
-            
-            return response()->json([
-                    'data' => [
-                        'Guardado'=>'Exitoso'
-                    ]
-                ], 201);        
-    
-            } 
-            else
-            {
-            }
-        
-        }
+        $request->validate(['image' => 'mimes:jpeg,png,jpg,mp4']);
+        //$data = request()->json()->all();
+        if ($request->hasFile('image')) {
+            $file      = $request->file('image');
+            $filename  = $file->getClientOriginalName();
+            //$extension = $file->getClientOriginalExtension();
+            $picture   = null;
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\albums  $albums
-     * @return \Illuminate\Http\Response
-     */
+            $path = $file->move('public/', $picture);
+            $picture   = date('His') . '-' . $filename;
+
+            $albumdata = json_decode($request->data, true);
+            $event = Events::findOrFail($albumdata['event_id']);
+            $albums = new Albums();
+            $albums->title = $albumdata['title'];
+            $albums->description = $albumdata['description'];
+            $albums->date = $albumdata['date'];
+            $albums->image = $picture;
+            $albums->event()->associate($event);
+            $albums->save();
+            return response()->json([
+                'message' => 'Albun creado exitosamente',
+                'res' => true,
+            ], 201);
+        } else {
+            return response()->json(
+                [
+                    'message' => 'Error al crear el album',
+                    'res' => false
+                ],
+                400
+            );
+        }
+    }
+
     public function show($id)
     {
         $albums = albums::findOrFail($id);
         return response()->json(
-              $albums
-       );
+            $albums
+        );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\albums  $albums
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(albums $albums)
-    {
-      //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\albums  $albums
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $data = $request->json()->all();
-        
+
         $albums = albums::findOrFail($id);
         // $dataAlbums = $data['albums'];
-        // $dataEvents = $data['events'];
-        // $events = Events::findOrFail($dataEvents['id']);
+        $dataEvents = $data['events'];
+        $events = Events::findOrFail($dataEvents['id']);
 
-       
+
         $albums->title =  $data['title'];
         $albums->description =  $data['description'];
         $albums->date =  $data['date'];
-        // $albums->events()->associate($events);
+        $albums->events()->associate($events);
         $albums->save();
 
         return response()->json([
-            'data' => [
-                'Actualizado'=>'Exitoso'
-            ]
-        ], 201);    
-        
+            'message' => 'Albun actualizado exitosamente',
+            'res' => true
+        ], 201);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\albums  $albums
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $albums = albums::findOrFail($id);
-        // var_dump($albums->image);   
-        // Storage::delete('$albums->image');
-        // Storage::delete('143925-oracle.png');
         $albums->delete();
-        return response()->json(['message'=>'albums quitado', 'albums'=>$albums],200);
+        return response()->json(['message' => 'album quitado', 'albums' => $albums], 200);
     }
 }

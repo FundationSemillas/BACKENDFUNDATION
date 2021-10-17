@@ -10,37 +10,18 @@ use Illuminate\Support\Facades\DB;
 
 class ImageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         return response()->json( images::all()
        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $id = $request->get('id');
-    
+        $album = Albums::findOrFail($id);
+        $request->validate(['image' => 'mimes:jpeg,png,jpg,mp4']);
         if($request->hasFile('image'))
         {
             $files = $request->file('image');
@@ -60,18 +41,12 @@ class ImageController extends Controller
                     $images->image =  $picture;
                     $images->type =  $extension;
                     $images->description =  $description;
-                    $images->albums_id = $id;
+                    $images->album()->associate($album);
                     $images->save();
             }
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\images  $images
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
       $data = DB::table('images')->where('albums_id', $id)->get();
@@ -81,24 +56,6 @@ class ImageController extends Controller
        
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\images  $images
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(images $images)
-    {
-      //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\images  $images
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $data = $request->json()->all();
@@ -121,12 +78,6 @@ class ImageController extends Controller
         
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\images  $images
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(images $images,$id)
     {
         $images = images::findOrFail($id);

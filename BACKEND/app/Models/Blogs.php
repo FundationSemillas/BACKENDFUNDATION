@@ -18,7 +18,7 @@ class Blogs extends Model
         'image',
         'link',
     ];
-
+ 
     public function Event()
     {
         return $this->hasMany(Events::class);

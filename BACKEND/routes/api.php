@@ -10,6 +10,7 @@ use App\Http\Controllers\VolunteerEventsController;
 use App\Http\Controllers\SponsorsController;
 use App\Http\Controllers\SponsorsEventsController;
 use App\Http\Controllers\AlbumController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RolsController;
 use App\Http\Controllers\VolunteersController;
 use App\Http\Controllers\UserController;
@@ -37,13 +38,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //Route::get('/', '\App\Http\Controllers\UserController@index');
 
 //Rutas de Authenticacion y recuperación de contraseña
-Route::post('login', '\App\Http\Controllers\AuthController@login');
+Route::post('login', [AuthController::class, 'login']);
 
 //Route::get('user', '\App\Http\Controllers\AuthController@user')->middleware('auth:api');
 
-Route::post('register', '\App\Http\Controllers\AuthController@register');
+Route::post('register', [AuthController::class, 'register']);
 
-
+ 
 Route::group(['middleware' => 'auth:api'], function () {
     //roles
     Route::post('rol/create', [RolsController::class, 'store']);
@@ -87,8 +88,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     //eventosVoluntarios
     Route::get('volunteerEvent', [VolunteerEventsController::class, 'index']);
     Route::get('volunteerEvent/findById/{id}', [VolunteerEventsController::class, 'show']);
-    Route::get('volunteerEvent/getByVolunteer/{id}', [VolunteerEventsController::class], 'byVolunteer');
-    Route::get('volunteerEvent/getByEvent/{id}', [VolunteerEventsController::class], 'byEvent');    
+    Route::get('volunteerEvent/getByVolunteer/{id}', [VolunteerEventsController::class, 'byVolunteer']);
+    Route::get('volunteerEvent/getByEvent/{id}', [VolunteerEventsController::class, 'byEvent']);    
     Route::post('volunteerEvent/create', [VolunteerEventsController::class, 'store']);
     Route::delete('volunteerEvent/delete/{id}', [VolunteerEventsController::class, 'destroy']);
     Route::put('volunteerEvent/update', [VolunteerEventsController::class, 'update']);
@@ -101,8 +102,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     //eventosPatrocinadores
     Route::get('sponsorEvent', [SponsorsEventsController::class, 'index']);
     Route::get('sponsorEvent/findById/{id}', [SponsorsEventsController::class, 'show']);
-    Route::get('sponsorEvent/getBySponsor/{id}', [SponsorsEventsController::class], 'bySponsor');
-    Route::get('sponsorEvent/getByEvent/{id}', [SponsorsEventsController::class], 'byEvent');
+    Route::get('sponsorEvent/getBySponsor/{id}', [SponsorsEventsController::class, 'bySponsor']);
+    Route::get('sponsorEvent/getByEvent/{id}', [SponsorsEventsController::class, 'byEvent']);
     Route::post('sponsorEvent/create', [SponsorsEventsController::class, 'store']);
     Route::delete('sponsorEvent/delete/{id}', [SponsorsEventsController::class, 'destroy']);
     Route::put('sponsorEvent/update', [SponsorsEventsController::class, 'update']);

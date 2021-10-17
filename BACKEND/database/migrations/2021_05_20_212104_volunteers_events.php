@@ -13,10 +13,10 @@ class VolunteersEvents extends Migration
      */
     public function up()
     {
-        Schema::create('volunteersEvents', function (Blueprint $table) {
+        Schema::create('volunteers_events', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('events_id')->constrained('events');
-            $table->foreignId('volunteers_id')->constrained('volunteers');
+            $table->foreignId('event_id')->constrained('events')->nullOnDelete();
+            $table->foreignId('volunteer_id')->constrained('volunteers')->nullOnDelete();
             $table->string('description')->nullable();
             $table->timestamps();
         });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rols;
 use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Http\Request;
@@ -22,12 +23,13 @@ class UserController extends Controller
   public function store(Request $request)
   {
     $user = new User();
+    $rol = Rols::findOrFail($request->input('rolId'));
     $user->name = $request->input('name');
     $user->last_name = $request->input('lastName');
     $user->email = $request->input('email');
     $user->password = Hash::make($request->input('password'));
     $user->permission = $request->input('permission');
-    $user->rol_id = $request->input('rolId');
+    $user->rol()->associate($rol);
     $user->save();
     return response()->json(['Usuario creado exitosamente'], 201);
   }
@@ -43,7 +45,7 @@ class UserController extends Controller
   public function update(Request $request, $id)
   {
     $data = $request->json()->all();
-    $user = user::findOrFail($id);
+    $user = User::findOrFail($id);
     $user->name =  $data['name'];
     $user->last_name =  $data['last_name'];
     //$user->email =  $data['email'];

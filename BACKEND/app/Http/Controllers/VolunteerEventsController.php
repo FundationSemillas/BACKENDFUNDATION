@@ -18,52 +18,40 @@ class VolunteerEventsController extends Controller
      */
     public function index()
     {
-        return response()->json( VolunteersEvents::all()
-       );
+        return response()->json(
+            VolunteersEvents::all()
+        );
     }
 
-    public function byVolunteer($id){
+    public function byVolunteer($id)
+    {
         $events = DB::table('events')
-            ->join('volunteersEvents', 'events.id', '=', 'volunteersEvents.events_id')
-            ->where('volunteersEvents.volunteers_id', '=', $id)
+            ->join('volunteers_events', 'events.id', '=', 'volunteers_events.event_id')
+            ->where('volunteers_events.volunteer_id', '=', $id)
             ->get();
         return $events;
     }
 
-    public function byEvent($id){
+    public function byEvent($id)
+    {
         $volunteers = DB::table('volunteers')
-            ->join('volunteersEvents', 'volunteers.id', '=', 'volunteersEvents.volunteers_id')
-            ->where('volunteersEvents.events_id', '=', $id)
+            ->join('volunteers_events', 'volunteers.id', '=', 'volunteers_events.volunteer_id')
+            ->where('volunteers_events.event_id', '=', $id)
             ->get();
         return $volunteers;
     }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-     
+
         $data = $request->json()->all();
-        
-        $dataVolunteersEvents = $data['volunteersEvents'];
-        $dataVolunteers = $data['volunteers'];
-        $dataEvents = $data['events'];
+
+        $dataVolunteersEvents = $data['volunteerEvent'];
+        $dataVolunteers = $data['volunteer'];
+        $dataEvents = $data['event'];
         $volunteers = Volunteers::findOrFail($dataVolunteers['id']);
         $events = Events::findOrFail($dataEvents['id']);
-        
+
         $volunteersEvents = new VolunteersEvents();
         $volunteersEvents->event()->associate($events);
         $volunteersEvents->volunteer()->associate($volunteers);
@@ -71,57 +59,31 @@ class VolunteerEventsController extends Controller
         $volunteersEvents->save();
 
         return response()->json([
-        'data' => [
-            'Guardado'=>'Exitoso'
-        ]
-    ], 201);        
-
+            'message' => 'Registro guardado exitosamente',
+            'res' => true
+        ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\volunteersEvents  $volunteersEvents
-     * @return \Illuminate\Http\Response
-     */
     public function show(volunteersEvents $volunteersEvents)
     {
         $id = $volunteersEvents->id;
         $volunteersEvents = volunteersEvents::findOrFail($id);
         return response()->json(
-              $volunteersEvents
-       );
+            $volunteersEvents
+        );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\volunteersEvents  $volunteersEvents
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(volunteersEvents $volunteersEvents)
-    {
-      //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\volunteersEvents  $volunteersEvents
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $data = $request->json()->all();
-        
+        $dataVolunteersEvents = $data['sponsorEvent'];
+        $id = $dataVolunteersEvents['id'];
         $volunteersEvents = volunteersEvents::findOrFail($id);
-        $dataVolunteersEvents = $data['sponsorsEvents'];
-        $dataSponsors = $data['sponsors'];
-        $dataEvents = $data['events'];
+        $dataSponsors = $data['sponsor'];
+        $dataEvents = $data['event'];
         $sponsors = Sponsors::findOrFail($dataSponsors['id']);
         $events = Events::findOrFail($dataEvents['id']);
-        
+
 
         $volunteersEvents->event()->associate($events);
         $volunteersEvents->sponsor()->associate($sponsors);
@@ -129,21 +91,18 @@ class VolunteerEventsController extends Controller
         $volunteersEvents->save();
 
         return response()->json(
-               $volunteersEvents
-        ); 
-        
+            [
+                'message' => 'Exito actualizando el registro',
+                'res' => true
+            ],
+            200
+        );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\volunteersEvents  $volunteersEvents
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(volunteersEvents $volunteersEvents,$id)
+    public function destroy(volunteersEvents $volunteersEvents, $id)
     {
         $volunteersEvents = volunteersEvents::findOrFail($id);
         $volunteersEvents->delete();
-        return response()->json(['message'=>'volunteersEvents quitado', 'volunteersEvents'=>$volunteersEvents],200);
+        return response()->json(['message' => 'volunteersEvents quitado', 'volunteersEvents' => $volunteersEvents], 200);
     }
 }

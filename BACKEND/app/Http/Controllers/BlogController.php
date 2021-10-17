@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 class BlogController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         return response()->json(
@@ -22,71 +17,48 @@ class BlogController extends Controller
         );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        if ($request->hasFile('image'))
-            {  
-                  $file      = $request->file('image');
-                  $filename  = $file->getClientOriginalName();
-                  $extension = $file->getClientOriginalExtension();
-                  $picture   = date('His').'-'.$filename;
-                  $path = $file->move('public/', $picture);
-    
-            $employeeData = json_decode($request->data,true);
-            $employeeData["image"] = $picture;
-        
-            $blogs = new Blogs();
-            $data=$blogs->addBlogs($employeeData);   
-            var_dump($data);   
-    
-            return response()->json([
-                    'data' => [
-                        'Guardado'=>'Exitoso'
-                    ]
-                ], 201);        
-    
-            } 
-            else
-            {
+        $mensaje = 'Blog creado exitosamente';
+        $blogdata = json_decode($request->data, true);
+        //$request->validate(['image' => 'mimes:jpeg,png,jpg,mp4']);
+        if ($request->hasFile('image')) {
+            $file      = $request->file('image');
+            $filename  = $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension();
+            $picture   = null;
+
+            if ($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'mp4') {
+                $picture   = date('His') . '-' . $filename;
+                $path = $file->move('public/', $picture);
+            } else {
+                $mensaje = 'El blog se creo pero el tipo de archivo no es aceptado por lo tanto no se guardo el archivo';
             }
-           
-        /*$data = $request->json()->all();
-        $dataBlog = $data['blogs'];
-        $blogs = new Blogs();
-        $blogs->title =  $dataBlog['title'];
-        $blogs->description =  $dataBlog['description'];
-        $blogs->image =  $dataBlog['image'];
-        $blogs->link =  $dataBlog['link'];
-        $blogs->save();
-        return response()->json([
-            'data' => [
-                'Guardado' => 'Exitoso'
-            ]
-        ], 201);*/
+
+            $blog = new Blogs();
+            $blog->title = $blogdata['title'];
+            $blog->description = $blogdata['description'];
+            $blog->image = $picture;
+            $blog->link = $blogdata['link']; 
+            $blog->save();
+            return response()->json([
+                'message' => $mensaje,
+                'res' => true,
+            ], 201);
+        } else {
+            $blog = new Blogs();
+            $blog->title = $blogdata['title'];
+            $blog->description = $blogdata['description'];
+            $blog->image = null;
+            $blog->link = $blogdata['link'];
+            $blog->save(); 
+            return response()->json([
+                'message' => $mensaje,
+                'res' => true
+            ], 201);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\blogs  $blogs
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $blogs = Blogs::findOrFail($id);
@@ -95,52 +67,31 @@ class BlogController extends Controller
         );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\blogs  $blogs
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(blogs $blogs)
+    public function update(Request $request)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\blogs  $blogs
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
+        
         $data = $request->json()->all();
+        $id = $request->input('id');
         $blogs = Blogs::findOrFail($id);
-         //$dataBlog = $data['blogs'];
+
         $blogs->title =  $data['title'];
         $blogs->description =  $data['description'];
-        //$blogs->image =  $dataBlog['image'];
-        //$blogs->link =  $data['link'];
+
         $blogs->save();
         return response()->json([
-            'data' => [
-                'Actualizado' => 'Exitoso'
-            ]
-        ], 201);
+            'message' => 'Blog actualizado exitosamente',
+            'res' => true
+        ], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\blogs  $blogs
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(blogs $blogs, $id)
     {
         $blogs = blogs::findOrFail($id);
         $blogs->delete();
-        return response()->json(['Message' => 'Eliminado'], 201);
+        return response()->json([
+            'message' => 'Blog eliminado',
+            'res' => true
+        ], 201);
     }
 
     public function imageStore(Request $request)

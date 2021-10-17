@@ -20,13 +20,16 @@ class RolsController extends Controller
         $rol->name = $request->input('name');
         $rol->description = $request->input('description');
         $rol->save();
-        return response()->json(['Rol guardado ', $rol], 201);
+        return response()->json([
+            'message' => 'Rol creado exitosamente',
+            'res' => true
+        ], 201);
     }
 
     public function show($id)
     {
         $rol = Rols::find($id);
-        if(!$rol){
+        if (!$rol) {
             return response()->json(['Rol no existente'], 404);
         }
         return response()->json([$rol], 200);
@@ -36,22 +39,28 @@ class RolsController extends Controller
     {
         $id = $request->input('id');
         $rol = Rols::find($id);
-        if(!$rol){
+        if (!$rol) {
             return response()->json(['Rol no existente'], 404);
         }
         $rol->name = $request->input('name');
         $rol->description = $request->input('description');
         $rol->save();
-        return response()->json(['Rol actualizado ', $rol], 200);
+        return response()->json([
+            'message' => 'Rol actualizado exitosamente',
+            'res' => true
+        ], 200);
     }
 
     public function destroy($id)
     {
         $rol = Rols::find($id);
-        if(!$rol){
+        if (!$rol) {
             return response()->json(['Rol no existente'], 404);
         }
         $rol->delete();
-        return response()->json(['Rol eliminado ' , $rol], 200);
+        return response()->json([
+            'message' => 'Rol eliminado',
+            $rol
+        ], 200);
     }
 }

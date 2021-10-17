@@ -22,7 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'permission',
-        'rol_id'
+        //'rol_id'
     ];
 
     /**
@@ -50,5 +50,9 @@ class User extends Authenticatable
 
     public function children(){
         return $this->hasMany(Children::class);
+    }
+
+    public function rol(){
+        return $this->belongsTo(Rols::class);
     }
 }

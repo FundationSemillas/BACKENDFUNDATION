@@ -76,7 +76,7 @@ class BlogController extends Controller
 
         $blogs->title =  $data['title'];
         $blogs->description =  $data['description'];
-
+        $blogs->link = $data['link'];
         $blogs->save();
         return response()->json([
             'message' => 'Blog actualizado exitosamente',

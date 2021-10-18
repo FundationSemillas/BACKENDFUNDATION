@@ -129,6 +129,7 @@ Route::get('blog/findById/{id}', [BlogController::class, 'show']);
 //eventos
 Route::get('event', [EventsController::class, 'index']);
 Route::get('event/findById/{id}', [EventsController::class, 'show']);
+Route::get('event/byBlog/{id}', [EventsController::class, 'byBlog']);
 
 //imagenes
 Route::get('image', [ImageController::class, 'index']);

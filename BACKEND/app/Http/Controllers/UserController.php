@@ -23,7 +23,7 @@ class UserController extends Controller
   public function store(Request $request)
   {
     $user = new User();
-    $rol = Rols::findOrFail($request->input('rolId'));
+    $rol = Rols::findOrFail($request->input('rol_id'));
     $user->name = $request->input('name');
     $user->last_name = $request->input('lastName');
     $user->email = $request->input('email');

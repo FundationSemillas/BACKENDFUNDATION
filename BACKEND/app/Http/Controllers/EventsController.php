@@ -7,7 +7,7 @@ use App\Models\Blogs;
 use App\Models\User;
 use Faker\Core\Number;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 
 class EventsController extends Controller
 {
@@ -48,15 +48,15 @@ class EventsController extends Controller
     public function update(Request $request)
     {
         $data = $request->json()->all();
-        $dataEvents = $data['data'];
-        $events = Events::findOrFail($dataEvents['id']);
+        //$dataEvents = $data['data'];
+        $events = Events::findOrFail($data['id']);
 
-        $events->name =  $dataEvents['name'];
-        $events->description =  $dataEvents['description'];
-        $events->place =  $dataEvents['place'];
-        $events->date =  $dataEvents['date'];
-        $events->hour =  $dataEvents['hour'];
-        $events->delay =  $dataEvents['delay'];
+        $events->name =  $data['name'];
+        $events->description =  $data['description'];
+        $events->place =  $data['place'];
+        $events->date =  $data['date'];
+        $events->hour =  $data['hour'];
+        $events->delay =  $data['delay'];
 
         $events->save();
         return response()->json([
@@ -73,5 +73,15 @@ class EventsController extends Controller
             'message' => 'Evento eliminado',
             'Evento' => $events
         ], 200);
+    }
+
+    public function byBlog($id)
+    {
+        $events = DB::table('events')
+            ->where('blog_id', '=', $id)
+            ->get();
+        return response()->json(
+            $events
+        , 200);
     }
 }

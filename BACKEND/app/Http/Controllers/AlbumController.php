@@ -60,15 +60,13 @@ class AlbumController extends Controller
         );
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $data = $request->json()->all();
 
-        $albums = albums::findOrFail($id);
+        $albums = albums::findOrFail($data['id']);
         // $dataAlbums = $data['albums'];
-        $dataEvents = $data['events'];
-        $events = Events::findOrFail($dataEvents['id']);
-
+        $events = Events::findOrFail($data['event_id']);
 
         $albums->title =  $data['title'];
         $albums->description =  $data['description'];

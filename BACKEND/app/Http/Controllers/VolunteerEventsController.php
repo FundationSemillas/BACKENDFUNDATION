@@ -76,10 +76,10 @@ class VolunteerEventsController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->json()->all();
-        $dataVolunteersEvents = $data['sponsorEvent'];
+        $dataVolunteersEvents = $data['volunteerEvent'];
         $id = $dataVolunteersEvents['id'];
         $volunteersEvents = volunteersEvents::findOrFail($id);
-        $dataSponsors = $data['sponsor'];
+        $dataSponsors = $data['volunteer'];
         $dataEvents = $data['event'];
         $sponsors = Sponsors::findOrFail($dataSponsors['id']);
         $events = Events::findOrFail($dataEvents['id']);

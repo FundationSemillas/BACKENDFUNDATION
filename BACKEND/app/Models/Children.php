@@ -11,19 +11,18 @@ class Children extends Model
     use HasFactory;
     protected $table = 'children';
     public $timestamps = true;
-
+ 
     protected $fillable = [
         'name',
         'surname',
         'dateBirth',
-        'age',
         'CI',
         'mothersName',
         'fathersName',
         'study',
         'houseAddress',
         'schoolName',
-        'Image',
+        'image',
         'state',
     ];
 
@@ -46,5 +45,11 @@ class Children extends Model
     function addChild($data)
     {
         DB::table('children')->insert($data);
+    }
+    public function zone(){
+        return $this->belongsTo(Zones::class);
+    }
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

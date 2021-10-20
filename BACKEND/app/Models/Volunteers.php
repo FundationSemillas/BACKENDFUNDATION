@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Volunteers extends Model
 {
     use HasFactory;
-     protected $fillable = [
-         'name',
-         'surname',
-         'CI',
+    protected $fillable = [
+        'name',
+        'surname',
+        'CI',
         'description',
         'address',
         'availability',
-        'telefonNumber',
+        'phoneNumber',
         'image',
         'state',
     ];

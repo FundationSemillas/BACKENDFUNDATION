@@ -21,9 +21,9 @@ class Volunteers extends Migration
             $table->string('description',300)->nullable();
             $table->string('address',200)->notNullable();
             $table->string('availability',200)->nullable();
-            $table->string('telefonNumber',30)->nullable();
+            $table->string('phoneNumber',30)->nullable();
             $table->string('image')->nullable();
-            $table->string('state')->nullable();
+            $table->boolean('state')->nullable();
             $table->timestamps();
         });
     }

@@ -9,7 +9,7 @@ class ZonesController extends Controller
 {
     public function index()
     {
-        return response()->json([Zones::all()], 200);
+        return response()->json(Zones::all(), 200);
     }
 
     public function store(Request $request)

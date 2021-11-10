@@ -44,6 +44,25 @@ Route::post('login', [AuthController::class, 'login']);
 
 Route::post('register', [AuthController::class, 'register']);
 
+//Ruta de verificacion de rol
+Route::get('/', function () {
+    return view('home');
+});
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['middleware' => ['admin']], function () {
+    Route::get('rol', [RolsController::class, 'index']);
+    Route::post('rol/create', [RolsController::class, 'store']);
+    Route::delete('rol/delete/{id}', [RolsController::class, 'destroy']);
+    Route::put('rol/update', [RolsController::class, 'update']);
+
+    Route::get('user', [UserController::class, 'index']);
+});
+//
+
  
 Route::group(['middleware' => 'auth:api'], function () {
     //roles

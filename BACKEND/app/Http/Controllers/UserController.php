@@ -48,8 +48,7 @@ class UserController extends Controller
     $user = User::findOrFail($id);
     $user->name =  $data['name'];
     $user->last_name =  $data['last_name'];
-    //$user->email =  $data['email'];
-    $user->password =  Hash::make($data['password']);
+    $user->password = Hash::make($data['password']);
     $user->save();
     return response()->json([
       'data' => [
@@ -64,4 +63,10 @@ class UserController extends Controller
     $user->delete();
     return response()->json(['message' => 'Usuario Eliminado', 'usuarios' => $user], 200);
   }
+
+  public function password(Request $request){
+
+  }
+
+  
 }

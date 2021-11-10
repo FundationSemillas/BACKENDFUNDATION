@@ -52,4 +52,16 @@ class AuthController extends Controller
         $user->save();
         return response()->json(['Usuario creado exitosamente'], 201);
     }
+
+    public function logout(Request $request){
+        $user = $request->user();
+        $id = $user->id;
+        $userDb = User::find($id);
+        if(!$userDb){
+            return response()->json(['Usuario no encontrado'], 404);
+        }
+        $userDb->api_token = null;
+        $userDb->save();
+        return response()->json(['Cierre de sesión exitoso'], 200);
+    }
 }

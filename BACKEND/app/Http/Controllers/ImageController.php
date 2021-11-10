@@ -21,7 +21,7 @@ class ImageController extends Controller
     {
         $id = $request->get('id');
         $album = Albums::findOrFail($id);
-        $request->validate(['image' => 'mimes:jpeg,png,jpg,mp4']);
+        //$request->validate(['image' => 'mimes:jpeg,png,jpg,mp4']);
         if($request->hasFile('image'))
         {
             $files = $request->file('image');
@@ -30,11 +30,12 @@ class ImageController extends Controller
                 // $imagen      = $file->file('image');
                 $filename  = $file->getClientOriginalName();
                 $extension = $file->getClientOriginalExtension();
-                $picture   = date('His').'-'.$filename;
-               
-                $path = $file->move('public/', $picture);
+                $picture   = null;
+                if ($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'mp4') {
+                    $picture   = date('His') . '-' . $filename;
+                    $path = $file->move('public/', $picture);
+                }
                 $description = "imagen insertada";
-
                 // $id= 21;
                 $images = new Images();
                     print_r($picture);
@@ -53,7 +54,6 @@ class ImageController extends Controller
         return response()->json(
               $data
        );
-       
     }
 
     public function update(Request $request, $id)
@@ -64,8 +64,6 @@ class ImageController extends Controller
         $dataImages = $data['image'];
         $dataAlbums = $data['album'];
         $album = Albums::findOrFail($dataAlbums['id']);
-
-       
         $images->image =  $dataImages['image'];
         $images->type =  $dataImages['type'];
         $images->description =  $dataImages['description'];
@@ -78,7 +76,7 @@ class ImageController extends Controller
         
     }
 
-    public function destroy(images $images,$id)
+    public function destroy($id)
     {
         $images = images::findOrFail($id);
         $idfk = $images['albums_id'];

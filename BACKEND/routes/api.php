@@ -112,6 +112,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('album/create', [AlbumController::class, 'store']);
     Route::delete('album/delete/{id}', [AlbumController::class, 'destroy']);
     Route::put('album/update', [AlbumController::class, 'update']);
+
+    //logout
+    Route::get('logout',[AuthController::class, 'logout']);
 });
 
 //roles

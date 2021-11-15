@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Sponsors;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Util\Json;
 
 class SponsorsController extends Controller
 {
@@ -16,112 +17,69 @@ class SponsorsController extends Controller
      */
     public function index()
     {
-        return response()->json( sponsors::all()
-       );
+        return response()->json(
+            sponsors::all()
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-     
-        if ($request->hasFile('image')){
+        $request->validate(['image' => 'mimes:jpeg,png,jpg,svg']);
+        if ($request->hasFile('image')) {
             $file      = $request->file('image');
             $filename  = $file->getClientOriginalName();
-            $extension = $file->getClientOriginalExtension();
-            $picture   = date('His').'-'.$filename;
-            $path = $file->storeAs('public/', $picture);
+            //$extension = $file->getClientOriginalExtension();
+            $picture   = date('His') . '-' . $filename;
+            $path = $file->move('public/', $picture);
 
-            $sponsorData = json_decode($request->data,true);
-            $sponsorData["image"] =  $picture;
+            $sponsorData = json_decode($request->data, true);
 
-            $sponsors = new Sponsors();
-            $data=$sponsors->addSponsor($sponsorData);
-            var_dump($data);
+            $sponsor = new Sponsors();
+            $sponsor->name = $sponsorData['name'];
+            $sponsor->description = $sponsorData['description'];
+            $sponsor->image = $picture;
+            $sponsor->save();
             return response()->json([
-                'data' => [
-                    'Guardado'=>'Exitoso'
-                ]
-            ], 201);    
+                'message' => 'Patrocinador creado exitosamente',
+                'res' => true
+            ], 201);
         }
-
-     
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\sponsors  $sponsors
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $sponsors = sponsors::findOrFail($id);
         return response()->json(
-              $sponsors
-       );
+            $sponsors
+        );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\sponsors  $sponsors
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(sponsors $sponsors)
-    {
-      //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\sponsors  $sponsors
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $data = $request->json()->all();
-
+        $id = $data['id'];
         $sponsors = sponsors::findOrFail($id);
-        // $dataSponsors = $data['sponsors'];
-       
+
         $sponsors->name =  $data['name'];
         $sponsors->description =  $data['description'];
-        $sponsors->image =  $data['image'];
+        
         $sponsors->save();
 
         return response()->json(
-               $sponsors
+            [
+                'message' => 'Patrocinador actualizado exitosamente',
+                'res' => true
+            ]
         );
-        
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\sponsors  $sponsors
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $sponsors = sponsors::findOrFail($id);
         $sponsors->delete();
-        return response()->json(['message'=>'sponsor quitado', 'sponsors'=>$sponsors],200);
+        return response()->json([
+            'message' => 'Patrocinador eliminado',
+            'sponsors' => $sponsors
+        ], 200);
     }
 }

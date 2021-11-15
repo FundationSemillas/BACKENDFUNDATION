@@ -1,107 +1,83 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Events;
 use App\Models\Sponsors;
+use App\Models\SponsorsEvents;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SponsorsEventsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        return response()->json( sponsorEvents::all()
-       );
+        return response()->json(
+            SponsorsEvents::all()
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function bySponsor($id)
     {
-        //
+        $events = DB::table('events')
+            ->join('sponsors_events', 'events.id', '=', 'sponsors_events.event_id')
+            ->where('sponsors_events.sponsor_id', '=', $id)
+            ->get();
+        return $events;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function byEvent($id)
+    {
+        $sponsors = DB::table('sponsors')
+            ->join('sponsors_events', 'sponsors.id', '=', 'sponsors_events.sponsor_id')
+            ->where('sponsors_events.event_id', '=', $id)
+            ->get();
+        return $sponsors;
+    }
+
     public function store(Request $request)
     {
-     
+
         $data = $request->json()->all();
-        
-        $dataSponsorEvents = $data['sponsorsEvents'];
-        $dataSponsors = $data['sponsors'];
-        $dataEvents = $data['events'];
-        $sponsors = Sponsors::findOrFail($dataEvents['id']);
+
+        $dataSponsorEvents = $data['sponsorEvent'];
+        $dataSponsors = $data['sponsor'];
+        $dataEvents = $data['event'];
+        $sponsors = Sponsors::findOrFail($dataSponsors['id']);
         $events = Events::findOrFail($dataEvents['id']);
-        
+
         $sponsorEvents = new SponsorsEvents();
         $sponsorEvents->event()->associate($events);
         $sponsorEvents->sponsor()->associate($sponsors);
-        $sponsorEvents->description =  $dataSponsorEvents['description'];
+        $sponsorEvents->description = $dataSponsorEvents['description'];
         $sponsorEvents->save();
 
         return response()->json([
-        'data' => [
-            'Guardado'=>'Exitoso'
-        ]
-    ], 201);        
-
+            'message' => 'Exito al guardar',
+            'res' => true
+        ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\sponsorEvents  $sponsorEvents
-     * @return \Illuminate\Http\Response
-     */
-    public function show(sponsorEvents $sponsorEvents)
+    public function show(SponsorsEvents $sponsorEvents)
     {
-        $sponsorEvents = sponsorEvents::findOrFail($id);
+        $id = $sponsorEvents->id;
+        $sponsorEvents = SponsorsEvents::findOrFail($id);
         return response()->json(
-              $sponsorEvents
-       );
+            $sponsorEvents
+        );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\sponsorEvents  $sponsorEvents
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(sponsorEvents $sponsorEvents)
-    {
-      //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\sponsorEvents  $sponsorEvents
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $data = $request->json()->all();
+        $dataSponsorEvents = $data['sponsorEvent'];
+        $id = $dataSponsorEvents['id'];
+        $sponsorEvents = SponsorsEvents::findOrFail($id);
         
-        $sponsorEvents = sponsorEvents::findOrFail($id);
-        $dataSponsorEvents = $data['sponsorsEvents'];
-        $dataSponsors = $data['sponsors'];
-        $dataEvents = $data['events'];
-        $sponsors = Sponsors::findOrFail($dataEvents['id']);
+        $dataSponsors = $data['sponsor'];
+        $dataEvents = $data['event'];
+        $sponsors = Sponsors::findOrFail($dataSponsors['id']);
         $events = Events::findOrFail($dataEvents['id']);
-        
 
         $sponsorEvents->event()->associate($events);
         $sponsorEvents->sponsor()->associate($sponsors);
@@ -109,21 +85,20 @@ class SponsorsEventsController extends Controller
         $sponsorEvents->save();
 
         return response()->json(
-               $sponsorEvents
+            [
+                'message' => 'Exito al actualizar',
+                'res' => true
+            ]
         );
-        
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\sponsorEvents  $sponsorEvents
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(sponsorEvents $sponsorEvents,$id)
+    public function destroy(SponsorsEvents $sponsorEvents, $id)
     {
-        $sponsorEvents = sponsorEvents::findOrFail($id);
+        $sponsorEvents = SponsorsEvents::findOrFail($id);
         $sponsorEvents->delete();
-        return response()->json(['message'=>'sponsorEvents quitado', 'sponsorEvents'=>$sponsorEvents],200);
+        return response()->json([
+            'message' => 'Registro eliminado',
+            'sponsorEvents' => $sponsorEvents
+        ], 200);
     }
 }

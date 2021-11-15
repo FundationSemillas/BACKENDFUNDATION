@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class Blogs extends Model
 {
@@ -18,7 +18,7 @@ class Blogs extends Model
         'image',
         'link',
     ];
-
+ 
     public function Event()
     {
         return $this->hasMany(Events::class);

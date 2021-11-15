@@ -17,16 +17,17 @@ class Children extends Migration
             $table->id();
             $table->string('name',160)->notNullable();
             $table->string('surname',160)->notNullable();
-            $table->timestamp('dateBirth')->notNullable();
-            $table->String('age',20)->notNullable();
+            $table->date('dateBirth')->notNullable();
             $table->string('CI',15)->notNullable();
             $table->string('mothersName',200)->nullable();
             $table->string('fathersName',200)->nullable();
-            $table->string('study')->notNullable();
+            $table->boolean('study');
             $table->string('houseAddress',200)->nullable();
             $table->string('schoolName',200)->nullable();
-            $table->string('Image')->nullable();
-            $table->string('state')->nullable();
+            $table->string('image')->nullable();
+            $table->boolean('state')->nullable();
+            $table->foreignId('user_id')->constrained('users')->nullOnDelete();
+            $table->foreignId('zone_id')->constrained('zones')->nullOnDelete()->nullable();
             $table->timestamps();
         });
     }

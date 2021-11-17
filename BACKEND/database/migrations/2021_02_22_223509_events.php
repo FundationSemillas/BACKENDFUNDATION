@@ -18,10 +18,11 @@ class Events extends Migration
             $table->string('name',150)->notNullable();
             $table->string('description',300)->nullable();
             $table->string('place')->nullable();
-            $table->timestamp('date')->nullable();
+            $table->date('date')->nullable();
             $table->string('hour')->nullable();
             $table->string('delay')->nullable();
-           // $table->foreignId('blogs_id')->constrained('blogs');
+            $table->foreignId('blog_id')->constrained('blogs')->nullable()->nullOnDelete();
+            $table->foreignId('user_id')->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
     }

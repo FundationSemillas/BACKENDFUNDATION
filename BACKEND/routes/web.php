@@ -2,6 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 
+
+
+
+
+use App\Mail\ServiceSemillas;
+use Illuminate\Support\Facades\Mail;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,7 +21,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/*Route::get('/', function () {
-   //
-});
-*/
+/* Route::get('mailExample', function () {
+   $id =15;
+   
+   Mail::to("@gmail.com")->send(new ServiceSemillas($id));
+   return "mensaje pepa";
+}); */

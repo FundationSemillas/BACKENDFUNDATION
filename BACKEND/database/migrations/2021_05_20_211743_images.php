@@ -18,7 +18,7 @@ class Images extends Migration
             $table->string('image')->notNullable();
             $table->string('type')->nullable();
             $table->string('description')->nullable();
-            $table->foreignId('albums_id')->constrained('albums');
+            $table->foreignId('album_id')->constrained('albums')->nullOnDelete();
             $table->timestamps();
         });
     }

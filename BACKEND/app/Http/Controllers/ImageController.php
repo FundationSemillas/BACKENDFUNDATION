@@ -50,7 +50,7 @@ class ImageController extends Controller
 
     public function show($id)
     {
-      $data = DB::table('images')->where('albums_id', $id)->get();
+      $data = DB::table('images')->where('album_id', $id)->get();
         return response()->json(
               $data
        );

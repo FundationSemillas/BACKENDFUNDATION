@@ -17,10 +17,10 @@ class VolunteersController extends Controller
     public function store(Request $request)
     {
         $mensaje = 'Voluntario guardado exitosamente';
-        $data = $request->json()->all();
-        $dataVolunteers = $data['data'];
+        $dataVolunteers = $request->json()->all();
+        //$dataVolunteers = $data['data'];
         if ($request->hasFile('image')) {
-            $file      = $dataVolunteers->file('image');
+            $file      = $request->file('image');
             $filename  = $file->getClientOriginalName();
             $extension = $file->getClientOriginalExtension();
             $picture   = null;
@@ -47,6 +47,7 @@ class VolunteersController extends Controller
             ], 201);
         } else {
             $volunteers = new Volunteers();
+            
             $volunteers->name =  $dataVolunteers['name'];
             $volunteers->surname =  $dataVolunteers['surname'];
             $volunteers->CI =  $dataVolunteers['CI'];
@@ -60,7 +61,7 @@ class VolunteersController extends Controller
             return response()->json([
                 'message' => $mensaje,
                 'res' => true
-            ], 201);
+            ], 201); 
         }
     }
 
@@ -74,8 +75,9 @@ class VolunteersController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->json()->all();
-        $dataVolunteers = $data['data'];
+        $dataVolunteers = $request->json()->all();
+        
+        //$dataVolunteers = $data['data'];
         $id = $dataVolunteers['id'];
         $volunteers = Volunteers::findOrFail($id);
 
@@ -88,7 +90,7 @@ class VolunteersController extends Controller
         $volunteers->phoneNumber =  $dataVolunteers['phoneNumber'];
         //$volunteers->image =  $dataVolunteers['image'];
         $volunteers->state =  $dataVolunteers['state'];
-        $volunteers->save();
+        $volunteers->save(); 
         return response()->json([
             'message' => 'Voluntario actualizado exitosamente',
             'res' => true

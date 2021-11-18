@@ -13,7 +13,7 @@ class AuthController extends Controller
     {
         try {
             $user = User::whereEmail($request->input('email'))->first();
-            
+
             if (!is_null($user) && Hash::check($request->input('password'), $user->password)) {
 
                 $token = $user->createToken('app')->accessToken;
@@ -42,14 +42,31 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $user = new User();
-        $user->name = $request->input('name');
-        $user->last_name = $request->input('lastName');
-        $user->email = $request->input('email');
-        $user->password = Hash::make($request->input('password'));
-        $user->permission = $request->input('permission');
-        $user->rol_id = $request->input('rol_id');
-        $user->save();
-        return response()->json(['Usuario creado exitosamente'], 201);
+        if (Auth::user() &&  Auth::user()->rol_id == 1) {
+            $user = new User();
+            $user->name = $request->input('name');
+            $user->last_name = $request->input('lastName');
+            $user->email = $request->input('email');
+            $user->password = Hash::make($request->input('password'));
+            $user->permission = $request->input('permission');
+            $user->rol_id = $request->input('rol_id');
+            $user->save();
+            return response()->json(['Usuario creado exitosamente'], 201);
+        }else{
+            return response()->json(['Permiso denegado para esta acción', 401]);
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        $user = $request->user();
+        $id = $user->id;
+        $userDb = User::find($id);
+        if (!$userDb) {
+            return response()->json(['Usuario no encontrado'], 404);
+        }
+        $userDb->api_token = null;
+        $userDb->save();
+        return response()->json(['Cierre de sesión exitoso'], 200);
     }
 }

@@ -29,13 +29,13 @@ class AlbumController extends Controller
             $picture   = date('His') . '-' . $filename;
 
             $albumdata = json_decode($request->data, true);
-            $event = Events::findOrFail($albumdata['event_id']);
+            //$event = Events::findOrFail($albumdata['event_id']);
             $albums = new Albums();
             $albums->title = $albumdata['title'];
             $albums->description = $albumdata['description'];
             $albums->date = $albumdata['date'];
             $albums->image = $picture;
-            $albums->event()->associate($event);
+            //$albums->event()->associate($event);
             $albums->save();
             return response()->json([
                 'message' => 'Albun creado exitosamente',
@@ -66,12 +66,12 @@ class AlbumController extends Controller
 
         $albums = albums::findOrFail($data['id']);
         // $dataAlbums = $data['albums'];
-        $events = Events::findOrFail($data['event_id']);
+        //$events = Events::findOrFail($data['event_id']);
 
         $albums->title =  $data['title'];
         $albums->description =  $data['description'];
         $albums->date =  $data['date'];
-        $albums->events()->associate($events);
+        //$albums->events()->associate($events);
         $albums->save();
 
         return response()->json([

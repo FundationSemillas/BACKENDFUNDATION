@@ -31,20 +31,17 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+/* Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
-});
+}); */
 
 //Route::get('/', '\App\Http\Controllers\UserController@index');
 
 //Rutas de Authenticacion y recuperación de contraseña
 Route::post('login', [AuthController::class, 'login']);
 
-//Route::get('user', '\App\Http\Controllers\AuthController@user')->middleware('auth:api');
+Route::get('user', '\App\Http\Controllers\AuthController@user')->middleware('auth:api');
 
-Route::post('register', [AuthController::class, 'register']);
-
- 
 Route::group(['middleware' => 'auth:api'], function () {
     //roles
     Route::post('rol/create', [RolsController::class, 'store']);
@@ -112,6 +109,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('album/create', [AlbumController::class, 'store']);
     Route::delete('album/delete/{id}', [AlbumController::class, 'destroy']);
     Route::put('album/update', [AlbumController::class, 'update']);
+
+    //user
+    Route::post('register', [AuthController::class, 'register']);
+    Route::get('logout',[AuthController::class, 'logout']);
 });
 
 //roles

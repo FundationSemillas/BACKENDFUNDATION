@@ -31,7 +31,7 @@ class ChildrenController extends Controller
                 $mensaje = 'El niño se guardo exitosamente pero el archivo no es de un formato adecuado por lo que no se guardo el archivo';
             }
             $childdata = json_decode($request->data, true);
-            $user = User::find($childdata['user_id']);
+            //$user = User::find($childdata['user_id']);
             $child = new Children();
             $child->name = $childdata['name'];
             $child->surname = $childdata['surname'];
@@ -43,8 +43,8 @@ class ChildrenController extends Controller
             $child->houseAddress = $childdata['houseAddress'];
             $child->schoolName = $childdata['schoolName'];
             $child->image = $picture;
-            $child->state = $childdata['state'];
-            $child->user()->associate($user);
+            //$child->state = $childdata['state'];
+            //$child->user()->associate($user);
             $child->save();
 
             return response()->json([

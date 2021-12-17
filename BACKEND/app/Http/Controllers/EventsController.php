@@ -23,10 +23,10 @@ class EventsController extends Controller
         $data = $request->json()->all();
 
         $dataEvents = $data['data'];
-        $dataBlog = $dataEvents['blog_id'];
-        $dataUser = $dataEvents['user_id'];
-        $blog = Blogs::find($dataBlog);
-        $user = User::find($dataUser);
+        //$dataBlog = $dataEvents['blog_id'];
+        //$dataUser = $dataEvents['user_id'];
+        //$blog = Blogs::find($dataBlog);
+        //$user = User::find($dataUser);
 
         $events = new Events();
         $events->name =  $dataEvents['name'];
@@ -35,8 +35,8 @@ class EventsController extends Controller
         $events->date =  $dataEvents['date'];
         $events->hour =  $dataEvents['hour'];
         $events->delay =  $dataEvents['delay'];
-        $events->blog()->associate($blog);
-        $events->user()->associate($user);
+        //$events->blog()->associate($blog);
+        //$events->user()->associate($user);
         $events->save();
 
         return response()->json([

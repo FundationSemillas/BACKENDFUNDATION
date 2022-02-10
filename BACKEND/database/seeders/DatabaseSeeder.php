@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Anthony',
             'last_name' => 'Intriago',
             'email' => 'afc.intriago@gmail.com',
-            'password' => Hash::make('123456'),
+            'password' => Hash::make(123456),
             'permission' => 'Admin',
             'rol_id' => 1
         ]);

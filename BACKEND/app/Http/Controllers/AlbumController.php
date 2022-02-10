@@ -25,8 +25,8 @@ class AlbumController extends Controller
             //$extension = $file->getClientOriginalExtension();
             $picture   = null;
 
-            $path = $file->move('public/', $picture);
             $picture   = date('His') . '-' . $filename;
+            $path = $file->move('public/', $picture);
 
             $albumdata = json_decode($request->data, true);
             //$event = Events::findOrFail($albumdata['event_id']);

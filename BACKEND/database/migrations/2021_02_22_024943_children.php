@@ -26,8 +26,8 @@ class Children extends Migration
             $table->string('schoolName',200)->nullable();
             $table->string('image')->nullable();
             $table->boolean('state')->nullable();
-            $table->foreignId('user_id')->constrained('users')->nullOnDelete();
-            $table->foreignId('zone_id')->constrained('zones')->nullOnDelete()->nullable();
+            $table->foreignId('user_id')->constrained('users')->nullable()->nullOnDelete();
+            $table->foreignId('zone_id')->constrained('zones')->nullable()->nullOnDelete();
             $table->timestamps();
         });
     }

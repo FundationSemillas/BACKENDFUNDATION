@@ -11,8 +11,9 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
+        //print_r(Hash::make($request->input('password'), ['rounds' => 12]));
         try {
-            $user = User::whereEmail($request->input('email'))->first();
+            $user = User::where("email", "=", $request->input('email'))->first();
 
             if (!is_null($user) && Hash::check($request->input('password'), $user->password)) {
 
@@ -24,7 +25,8 @@ class AuthController extends Controller
                     'token' => $user->api_token
                 ], 201);
             }
-        } catch (\Exception $exception) {
+        } catch (Throwable $exception) {
+            //print_r($exception);
             return response([
                 'message' => 'Error al iniciar sesión',
 

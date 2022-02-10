@@ -24,12 +24,7 @@ class ChildrenController extends Controller
             $filename  = $file->getClientOriginalName();
             $extension = $file->getClientOriginalExtension();
             $picture   = null;
-            if ($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'mp4') {
-                $picture   = date('His') . '-' . $filename;
-                $path = $file->move('public/', $picture);
-            } else {
-                $mensaje = 'El niño se guardo exitosamente pero el archivo no es de un formato adecuado por lo que no se guardo el archivo';
-            }
+            
             $childdata = json_decode($request->data, true);
             //$user = User::find($childdata['user_id']);
             $child = new Children();
@@ -43,6 +38,12 @@ class ChildrenController extends Controller
             $child->houseAddress = $childdata['houseAddress'];
             $child->schoolName = $childdata['schoolName'];
             $child->image = $picture;
+            if ($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'mp4') {
+                $picture   = date('His') . '-' . $filename;
+                $path = $file->move('public/', $picture);
+            } else {
+                $mensaje = 'El niño se guardo exitosamente pero el archivo no es de un formato adecuado por lo que no se guardo el archivo';
+            }
             //$child->state = $childdata['state'];
             //$child->user()->associate($user);
             $child->save();

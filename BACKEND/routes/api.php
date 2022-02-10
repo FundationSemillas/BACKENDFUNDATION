@@ -31,12 +31,6 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
-/* Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-}); */
-
-//Route::get('/', '\App\Http\Controllers\UserController@index');
-
 //Rutas de Authenticacion y recuperación de contraseña
 Route::post('login', [AuthController::class, 'login']);
 
@@ -156,7 +150,7 @@ Route::delete('/image/id/{id}', function ($id) {
 });
 
 Route::get('/filterYear/{year}', function ($year) {
-    $data = DB::table('albums')->whereYear('date', '=', $year)->get();
+    $data = DB::table('albums')->where('date', 'LIKE', "$year%")->get();
     return response()->json(
         $data
     );
